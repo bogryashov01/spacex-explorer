@@ -1,8 +1,10 @@
 # SpaceX Explorer (Next.js, React, TypeScript)
 
-A frontend application for exploring SpaceX launches using the public SpaceX API.
+This is a small frontend app for exploring SpaceX launches using the public SpaceX API.
 
-The app focuses on performance, clean architecture, and a solid user experience, including server-side filtering, pagination, and responsive UI states.
+I focused on building something clean and understandable, with decent UX and without overcomplicating things, especially considering the timebox.
+
+---
 
 ## Tech Stack
 
@@ -11,6 +13,7 @@ The app focuses on performance, clean architecture, and a solid user experience,
 - TanStack Query (React Query)
 - SCSS Modules
 
+---
 
 ## How to run
 
@@ -18,83 +21,96 @@ The app focuses on performance, clean architecture, and a solid user experience,
 npm install
 npm run dev
 
+Features
 
----
+* Launches list with server-side pagination
+* Search, filtering and sorting
+* “Load more” pagination (infinite loading)
+* Launch details page (rocket + launchpad info)
+* Favorites stored in LocalStorage
+* Loading / error / empty states
+* Basic accessibility (ARIA attributes, semantic markup)
 
-## 📊 Features
+⸻
 
-```md
-## Features
+Architecture decisions
 
-- Launches list with server-side pagination
-- Search, filtering, and sorting
-- Infinite loading ("Load more")
-- Launch details page with rocket and launchpad info
-- Favorites stored in LocalStorage
-- Responsive UI with loading, empty, and error states
+Server-side filtering and pagination
 
+Instead of loading everything on the client, the app uses /launches/query from the SpaceX API.
 
-## Architecture Decisions
+This keeps things more scalable and closer to how a real app would work:
 
-### 1. Server-side filtering and pagination
+* less data on the client
+* filtering and sorting handled by the API
+* better performance
 
-The launches list uses the `/launches/query` endpoint instead of fetching all data on the client.
+⸻
 
-This allows:
-- better performance
-- scalable filtering and sorting
-- reduced data transfer
+React Query for data handling
 
-### 2. React Query as data layer
+I used React Query to avoid managing async state manually.
 
-TanStack Query is used for:
-- caching
-- deduplication
-- pagination (useInfiniteQuery)
-- retry logic
+It handles:
 
-This avoids manual state management and simplifies async handling.
+* caching
+* request deduplication
+* pagination (useInfiniteQuery)
+* loading and error states
 
-### 3. Separation of concerns
+This made the data layer much simpler and more predictable.
 
-The app is structured into clear layers:
+⸻
 
-- API layer (`lib/api`)
-- Data hooks (`hooks`)
-- UI components (`components`)
+Separation of concerns
 
-UI components do not handle fetching logic directly.
+I tried to keep things structured:
 
-### 4. Favorites as feature state
+* API logic → lib/api
+* data hooks → hooks
+* UI → components
 
-Favorites are stored in LocalStorage as a user-specific feature.
+Components don’t fetch data directly — they just render what they receive.
 
-A small snapshot of launch data is stored to:
-- avoid extra API calls
-- allow instant rendering
-- support offline usage
+⸻
 
-### 5. Infinite loading
+Favorites as local feature
 
-The launches list uses `useInfiniteQuery` to progressively load data instead of fetching everything at once.
+Favorites are stored in LocalStorage.
 
-## Tradeoffs
+I decided to store a small snapshot of launch data instead of just IDs, so:
 
-- Favorites are implemented using LocalStorage without a global state (e.g., context or store) to keep the solution simple within the timebox.
-- UI components are intentionally not over-abstracted to avoid unnecessary complexity.
-- No SSR/SSG is used for the app, focusing instead on client-side data handling for simplicity.
+* the favorites page renders instantly
+* no extra API calls are needed
+* it works even without network
 
+⸻
 
-## What I would improve with more time
+Infinite loading
 
-- Add global state (context) for favorites synchronization
-- Implement virtualization for long lists
-- Add charts (launch success rate, launches per year)
-- Improve accessibility (focus management, keyboard navigation)
-- Add URL-based filters (shareable search state)
+The list uses useInfiniteQuery to load data step by step instead of fetching everything at once.
 
+⸻
 
-## Known limitations
+Tradeoffs
 
-- Favorites are stored locally and not shared across devices
-- Some launches do not have images or external links
+* The solution is intentionally kept simple due to the 3–5 hour timebox.
+* Favorites are implemented with LocalStorage only (no global state like context).
+* No SSR/SSG is used — everything is client-side for simplicity.
+
+⸻
+
+What I would improve with more time
+
+* Add global state (context) for favorites synchronization
+* Add virtualization for large lists
+* Add charts (launch stats)
+* Improve accessibility (keyboard navigation, focus states)
+* Sync filters with URL (shareable state)
+
+⸻
+
+Known limitations
+
+* Favorites are stored only locally (not shared across devices)
+* Some launches don’t have images or links from the API
