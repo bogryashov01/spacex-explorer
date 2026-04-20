@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 
 import Providers from '@/components/common/Providers';
 
-import './globals.css';
+import './globals.scss';
 import Header from '@/components/common/Header/Header';
 
 export const metadata: Metadata = {
