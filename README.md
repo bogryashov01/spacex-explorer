@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SpaceX Explorer (Next.js, React, TypeScript)
 
-## Getting Started
+A frontend application for exploring SpaceX launches using the public SpaceX API.
 
-First, run the development server:
+The app focuses on performance, clean architecture, and a solid user experience, including server-side filtering, pagination, and responsive UI states.
+
+## Tech Stack
+
+- Next.js (App Router)
+- React + TypeScript
+- TanStack Query (React Query)
+- SCSS Modules
+
+
+## How to run
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📊 Features
 
-## Learn More
+```md
+## Features
 
-To learn more about Next.js, take a look at the following resources:
+- Launches list with server-side pagination
+- Search, filtering, and sorting
+- Infinite loading ("Load more")
+- Launch details page with rocket and launchpad info
+- Favorites stored in LocalStorage
+- Responsive UI with loading, empty, and error states
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Architecture Decisions
 
-## Deploy on Vercel
+### 1. Server-side filtering and pagination
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The launches list uses the `/launches/query` endpoint instead of fetching all data on the client.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This allows:
+- better performance
+- scalable filtering and sorting
+- reduced data transfer
+
+### 2. React Query as data layer
+
+TanStack Query is used for:
+- caching
+- deduplication
+- pagination (useInfiniteQuery)
+- retry logic
+
+This avoids manual state management and simplifies async handling.
+
+### 3. Separation of concerns
+
+The app is structured into clear layers:
+
+- API layer (`lib/api`)
+- Data hooks (`hooks`)
+- UI components (`components`)
+
+UI components do not handle fetching logic directly.
+
+### 4. Favorites as feature state
+
+Favorites are stored in LocalStorage as a user-specific feature.
+
+A small snapshot of launch data is stored to:
+- avoid extra API calls
+- allow instant rendering
+- support offline usage
+
+### 5. Infinite loading
+
+The launches list uses `useInfiniteQuery` to progressively load data instead of fetching everything at once.
+
+## Tradeoffs
+
+- Favorites are implemented using LocalStorage without a global state (e.g., context or store) to keep the solution simple within the timebox.
+- UI components are intentionally not over-abstracted to avoid unnecessary complexity.
+- No SSR/SSG is used for the app, focusing instead on client-side data handling for simplicity.
+
+
+## What I would improve with more time
+
+- Add global state (context) for favorites synchronization
+- Implement virtualization for long lists
+- Add charts (launch success rate, launches per year)
+- Improve accessibility (focus management, keyboard navigation)
+- Add URL-based filters (shareable search state)
+
+
+## Known limitations
+
+- Favorites are stored locally and not shared across devices
+- Some launches do not have images or external links

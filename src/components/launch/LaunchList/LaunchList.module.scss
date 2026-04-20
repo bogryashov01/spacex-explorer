@@ -1,0 +1,36 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.list {
+  display: grid;
+  gap: 16px;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+}
+
+.message {
+  padding: 32px 16px;
+  text-align: center;
+  color: #374151;
+}
+
+.button {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+  background: #111827;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

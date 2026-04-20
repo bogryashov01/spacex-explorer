@@ -1,0 +1,29 @@
+.error {
+  padding: 40px 16px;
+  text-align: center;
+  border: 1px solid #fecaca;
+  border-radius: 16px;
+  background: #fef2f2;
+}
+
+.title {
+  margin: 0 0 8px;
+  font-size: 20px;
+  color: #991b1b;
+}
+
+.description {
+  margin: 0 0 16px;
+  color: #7f1d1d;
+  line-height: 1.5;
+}
+
+.button {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+  background: #111827;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
