@@ -21,6 +21,8 @@ I focused on building something clean and understandable, with decent UX and wit
 npm install
 npm run dev
 
+```
+
 Features
 
 * Launches list with server-side pagination
